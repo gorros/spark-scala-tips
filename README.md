@@ -57,6 +57,9 @@ This way, if Spark wails at some stage it can reconstruct the current state from
 And data is loaded to Spark via `UNLAOD` command. So if you do not persist (cache) dataframe, in case calculation fails and Spark resubmits it, it will trigger
 new `UNLOAD` and therefore unnecessary load on Redshift (not to mention longer overall processing time).
 
+Whereas, while writing data to redshift definitely use `CSV GZIP` as  `tempformat`. Here is a nice [benchmark](https://www.stitchdata.com/blog/redshift-database-benchmarks-copy-performance-of-csv-json-and-avro/) confirming that.
+
 
 (to be continued)
+
 
