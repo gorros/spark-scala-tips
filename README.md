@@ -80,7 +80,7 @@ and
   filesystem (s3n: URIs).</description>
 </property>
 ```
-Generally, I would suggest using s3a since it is more recent API. But knowing the number of partitions will help you better configure resource allocation. (Here)[http://site.clairvoyantsoft.com/understanding-resource-allocation-configurations-spark-application/] you can find quite nice example of calcuation of recources for Spark application. 
+Generally, I would suggest using s3a since it is more recent API. But knowing the number of partitions will help you better configure resource allocation. [Here](http://site.clairvoyantsoft.com/understanding-resource-allocation-configurations-spark-application/) you can find quite nice example of calcuation of recources for Spark application. 
 
 (to be continued)
 
