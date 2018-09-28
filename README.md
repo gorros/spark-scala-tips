@@ -59,6 +59,28 @@ new `UNLOAD` and therefore unnecessary load on Redshift (not to mention longer o
 
 Whereas, while writing data to redshift definitely use `CSV GZIP` as  `tempformat`. Here is a nice [benchmark](https://www.stitchdata.com/blog/redshift-database-benchmarks-copy-performance-of-csv-json-and-avro/) confirming that.
 
+## Working with S3
+
+While reading files from S3 bare in mind that depending on API (__s3a__ or __s3n__) number of partitions for files on S3 will be different ([source](https://hadoop.apache.org/docs/current/hadoop-aws/tools/hadoop-aws/index.html#Features)):
+
+```
+<property>
+  <name>fs.s3a.block.size</name>
+  <value>32M</value>
+  <description>Block size to use when reading files using s3a: file system.
+  </description>
+</property>
+``` 
+and
+```
+<property>
+  <name>fs.s3n.block.size</name>
+  <value>67108864</value>
+  <description>Block size to use when reading files using the native S3
+  filesystem (s3n: URIs).</description>
+</property>
+```
+Generally, I would suggest using s3a since it is more recent API. But knowing the number of partitions will help you better configure resource allocation. (Here)[http://site.clairvoyantsoft.com/understanding-resource-allocation-configurations-spark-application/] you can find quite nice example of calcuation of recources for Spark application. 
 
 (to be continued)
 
