@@ -82,6 +82,19 @@ and
 ```
 Generally, I would suggest using s3a since it is more recent API. But knowing the number of partitions will help you better configure resource allocation. [Here](http://site.clairvoyantsoft.com/understanding-resource-allocation-configurations-spark-application/) you can find quite nice example of calcuation of recources for Spark application. 
 
+### Problem:
+Saving dataframe as Parquet files to S3 is a quite common use-case, however, it appears to be much slower than writing the same dataframe to HDFS. As I understand, the reason is that Spark creates `temporary` folder where it stores initial files and then after all tasks are finished it move them to a final destination (usually to the folder where `temporary` is located). In the case of HDFS it is achieved by renaming files, but in the case of S3 there is no such operation, and it should be done as `copy` and `delete`. Also, it seems this is done by one thread, and if the number of files is large the different between HDFS and S3 writes is bigger. 
+
+### Solution
+Write dataframe to temporary HDFS folder and later copy it to s3 using [s3-dist-cp](https://docs.aws.amazon.com/emr/latest/ReleaseGuide/UsingEMR_s3distcp.html). If you run Spark applications on EMR it will be available as EMR Step or just command line command. So you can use the following method to do that:
+```
+import scala.sys.process._
+
+def s3distCp(src: String, dest: String): Unit = {
+    s"s3-dist-cp --src $src --dest $dest".!
+}
+```
+
 (to be continued)
 
 
