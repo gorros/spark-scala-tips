@@ -94,6 +94,8 @@ def s3distCp(src: String, dest: String): Unit = {
     s"s3-dist-cp --src $src --dest $dest".!
 }
 ```
+***Note***: 
+To be able to use this method, you need Hadoop application to be added and you need to run Spark in client or local mode since s3-dist-cp is not available on slave nodes. If you want to run in cluster mode, then copy _s3-dist-cp_ command to slaves during bootstrap. 
 
 (to be continued)
 
