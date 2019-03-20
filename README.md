@@ -84,6 +84,8 @@ Generally, I would suggest using s3a since it is more recent API. But knowing th
 
 ### Problem:
 Saving dataframe as Parquet files to S3 is a quite common use-case, however, it appears to be much slower than writing the same dataframe to HDFS. As I understand, the reason is that Spark creates `temporary` folder where it stores initial files and then after all tasks are finished it move them to a final destination (usually to the folder where `temporary` is located). In the case of HDFS it is achieved by renaming files, but in the case of S3 there is no such operation, and it should be done as `copy` and `delete`. Also, it seems this is done by one thread, and if the number of files is large the different between HDFS and S3 writes is bigger. 
+#### Update
+In [this](https://aws.amazon.com/blogs/big-data/improve-apache-spark-write-performance-on-apache-parquet-formats-with-the-emrfs-s3-optimized-committer/) blog post AWS describes above issue and annonces inprovement for Spark write performance of Parquet files to S3. From my experince , I still find bellow solution faster for large number of file. But, nevertheless, try to use EMR 5.20 and above anyway since EMR 5.20 also inroduced Spark 2.4. 
 
 ### Solution
 Write dataframe to temporary HDFS folder and later copy it to s3 using [s3-dist-cp](https://docs.aws.amazon.com/emr/latest/ReleaseGuide/UsingEMR_s3distcp.html). If you run Spark applications on EMR it will be available as EMR Step or just command line command. So you can use the following method to do that:
